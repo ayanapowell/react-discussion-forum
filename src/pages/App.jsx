@@ -10,12 +10,53 @@ class App extends React.Component {
       masterPostsList: []
     };
     this.handleAddingNewPosts = this.handleAddingNewPosts.bind(this);
+    this.handleVoting = this.handleVoting.bind(this);
+  }
+  componentDidUpdate() {}
+  sortMasterPostList() {
+    let key = "upVotes";
+    return function(a, b) {
+      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+        return 0;
+      }
+
+      const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
+      const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
+
+      let comparison = 0;
+      if (varA > varB) {
+        comparison = 1;
+      } else if (varA < varB) {
+        comparison = -1;
+      }
+      return comparison;
+    };
   }
   handleAddingNewPosts(newPost) {
     const newMasterPostsList = this.state.masterPostsList.slice();
     newMasterPostsList.push(newPost);
-    this.setState({ masterPostsList: newMasterPostsList });
-    console.log(this.state.masterPostsList);
+    this.setState({
+      masterPostsList: newMasterPostsList.sort(this.sortMasterPostList())
+    });
+  }
+
+  handleVoting(votingInfo) {
+    const postCopy = this.state.masterPostsList.find(
+      post => post.id === votingInfo.id
+    );
+    if (votingInfo.upVote) {
+      postCopy.upVotes = postCopy.upVotes + 1;
+    } else {
+      postCopy.downVotes = postCopy.downVotes + 1;
+    }
+    const newMasterPostsList = this.state.masterPostsList.filter(
+      item => item.id !== votingInfo.id
+    );
+    newMasterPostsList.push(postCopy);
+
+    this.setState({
+      masterPostsList: newMasterPostsList.sort(this.sortMasterPostList())
+    });
   }
   render() {
     return (
@@ -29,6 +70,7 @@ class App extends React.Component {
               <Dashboard
                 postList={this.state.masterPostsList}
                 onNewPostCreation={this.handleAddingNewPosts}
+                onNewVote={this.handleVoting}
               />
             )}
           />

@@ -49,7 +49,9 @@ function PostForm(props) {
       username: _username.value,
       date: todaysDate,
       post: _post.value,
-      id: v4()
+      id: v4(),
+      upVotes: 0,
+      downVotes: 0
     });
   }
   return (
