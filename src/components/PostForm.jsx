@@ -5,8 +5,13 @@ import v4 from "uuid";
 const PostFormEl = styled.div`
   form {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    width: 100%;
+    width: 50%;
+    background-color: #fafafa;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 0.5px solid black;
   }
   input {
     height: 50px;
@@ -14,28 +19,35 @@ const PostFormEl = styled.div`
     background: #fafafa;
     border: 1px solid #ccc;
     border-radius: 4px;
+    padding: 15px;
   }
 
   button {
     height: 50px;
     width: 100px;
-    margin-left: 30px;
+    margin-bottom: 0;
     background: #f15025;
     border: 0;
     border-radius: 4px;
     color: white;
     font-size: 15px;
   }
-  .form-group:first-of-type {
-    width: 80%;
-  }
 `;
 
 function PostForm(props) {
   let _post = null;
+  let _username = null;
+  let today = new Date();
+  const dd = String(today.getDate()).padStart(2, "0");
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const yyyy = today.getFullYear();
+  const todaysDate = `${mm}/${dd}/${yyyy}`;
+
   function handleNewPostSubmission(event) {
     event.preventDefault();
     props.onNewPostCreation({
+      username: _username.value,
+      date: todaysDate,
       post: _post.value,
       id: v4()
     });
@@ -44,7 +56,18 @@ function PostForm(props) {
     <div>
       <PostFormEl>
         <form action="" onSubmit={handleNewPostSubmission}>
-          <div className="form-group">
+          <div className="form-group group-username">
+            <input
+              type="text"
+              name=""
+              id="username"
+              placeholder="Your username"
+              ref={input => {
+                _username = input;
+              }}
+            />
+          </div>
+          <div className="form-group group-post">
             <input
               type="text"
               id="post"

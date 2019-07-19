@@ -15,7 +15,12 @@ class Dashboard extends React.Component {
           <PostForm onNewPostCreation={this.props.onNewPostCreation} />
           <div className="posts">
             {this.props.postList.map(post => (
-              <Post post={post.post} key={post.id} />
+              <Post
+                post={post.post}
+                key={post.id}
+                username={post.username}
+                date={post.date}
+              />
             ))}
           </div>
         </DashboardEl>
