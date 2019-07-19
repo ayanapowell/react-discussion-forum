@@ -12,31 +12,12 @@ class App extends React.Component {
     this.handleAddingNewPosts = this.handleAddingNewPosts.bind(this);
     this.handleVoting = this.handleVoting.bind(this);
   }
-  componentDidUpdate() {}
-  sortMasterPostList() {
-    let key = "upVotes";
-    return function(a, b) {
-      if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
-        return 0;
-      }
 
-      const varA = typeof a[key] === "string" ? a[key].toUpperCase() : a[key];
-      const varB = typeof b[key] === "string" ? b[key].toUpperCase() : b[key];
-
-      let comparison = 0;
-      if (varA > varB) {
-        comparison = 1;
-      } else if (varA < varB) {
-        comparison = -1;
-      }
-      return comparison;
-    };
-  }
   handleAddingNewPosts(newPost) {
     const newMasterPostsList = this.state.masterPostsList.slice();
     newMasterPostsList.push(newPost);
     this.setState({
-      masterPostsList: newMasterPostsList.sort(this.sortMasterPostList())
+      masterPostsList: newMasterPostsList
     });
   }
 
@@ -55,7 +36,7 @@ class App extends React.Component {
     newMasterPostsList.push(postCopy);
 
     this.setState({
-      masterPostsList: newMasterPostsList.sort(this.sortMasterPostList())
+      masterPostsList: newMasterPostsList
     });
   }
   render() {
